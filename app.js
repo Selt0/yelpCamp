@@ -1,19 +1,33 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import { mongoURI as mongodb } from './keys.js';
+import mongoose from 'mongoose';
 
 const app = express();
 const port = 5000;
 
-let campgrounds = [
-  { name: 'Salmon Creek', image: 'images/pexels-snapwire-699558.jpg' },
-  { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
-  { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
-  { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
-  { name: 'Salmon Creek', image: 'images/pexels-snapwire-699558.jpg' },
-  { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
-  { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
-  { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
-];
+mongoose
+  .connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to DB!'))
+  .catch((error) => console.error(error.message));
+
+const campgroundSchema = new mongoose.Schema({
+  name: String,
+  image: String,
+});
+
+const Campground = mongoose.model('Campground', campgroundSchema);
+
+// let campgrounds = [
+//   { name: 'Salmon Creek', image: 'images/pexels-snapwire-699558.jpg' },
+//   { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
+//   { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
+//   { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
+//   { name: 'Salmon Creek', image: 'images/pexels-snapwire-699558.jpg' },
+//   { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
+//   { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
+//   { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
+// ];
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -24,17 +38,25 @@ app.get('/', (req, res) => {
 });
 
 app.get('/campgrounds', (req, res) => {
-  res.render('campgrounds', { campgrounds: campgrounds });
+  // get campgrounds from database
+  Campground.find({}, (err, campgrounds) => {
+    if (err) return console.error(err);
+
+    res.render('campgrounds', { campgrounds: campgrounds });
+  });
 });
 
 app.post('/campgrounds', (req, res) => {
-  // get data from form and add to campgrounds
+  // get data from form
   let newCampground = {
     name: req.body.name,
     image: req.body.image,
   };
+  // add to campgrounds db
+  Campground.create(newCampground, (err, campground) => {
+    err ? console.error(err) : console.log(`${campground.name} saved to DB!`);
+  });
 
-  campgrounds.push(newCampground);
   // redirect back to campground
   res.redirect('campgrounds');
 });
