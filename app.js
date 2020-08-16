@@ -4,8 +4,9 @@ import mongodb from './keys.js';
 import mongoose from 'mongoose';
 import Campground from './models/campground.js';
 import Comment from './models/comment.js';
-import seedDB from './seeds.js';
+// import seedDB from './seeds.js';
 
+// reset database
 // seedDB();
 
 const app = express();
@@ -20,30 +21,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-// INDEX
 app.get('/', (req, res) => {
   res.render('landing');
 });
 
+// INDEX
 app.get('/campgrounds', (req, res) => {
   // get campgrounds from database
   Campground.find({}, (err, campgrounds) => {
     if (err) return console.error(err);
 
-    res.render('index', { campgrounds: campgrounds });
+    res.render('campgrounds/index', { campgrounds: campgrounds });
   });
 });
 
+// CREATE
 app.post('/campgrounds', (req, res) => {
-  // get data from form
-  let newCampground = {
-    name: req.body.name,
-    image: req.body.image,
-    description: req.body.description,
-  };
-
   // add to campgrounds db
-  Campground.create(newCampground, (err, campground) => {
+  Campground.create(req.body.campground, (err, campground) => {
     err ? console.error(err) : console.log(`${campground.name} saved to DB!`);
   });
 
@@ -51,8 +46,9 @@ app.post('/campgrounds', (req, res) => {
   res.redirect('/campgrounds');
 });
 
+// NEW
 app.get('/campgrounds/new', (req, res) => {
-  res.render('new');
+  res.render('campgrounds/new');
 });
 
 // SHOW
@@ -62,9 +58,33 @@ app.get('/campgrounds/:id', (req, res) => {
     .exec((err, campground) => {
       if (err) return console.error(err);
 
-      res.render('show', { campground: campground });
+      res.render('campgrounds/show', { campground: campground });
     });
 });
+
+// NEW
+app.get('/campgrounds/:id/comments/new', (req, res) => {
+  Campground.findById(req.params.id, (err, campground) => {
+    if (err) return console.error(err);
+    res.render('comments/new', { campground: campground });
+  });
+});
+
+// CREATE
+app.post('/campgrounds/:id/comments', (req, res) => {
+  Campground.findById(req.params.id, (err, campground) => {
+    if (err) return console.error(err);
+
+    Comment.create(req.body.comment, (err, comment) => {
+      if (err) return console.error(err);
+
+      campground.comments.push(comment);
+      campground.save();
+      res.redirect(`/campgrounds/${campground._id}`);
+    });
+  });
+});
+
 app.listen(port, () => {
   console.log('Sever is live!');
 });
