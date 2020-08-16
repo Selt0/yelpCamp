@@ -7,4 +7,7 @@
 <p><%= campground.description %></p>
 
 <a href="/campgrounds">Go back</a>
-<%- include('partials/footer') -%>
+
+<% for (const comment of campground.comments){ %>
+<p><strong><%= comment.author %></strong> - <%= comment.text %></p>
+<% } %> <%- include('partials/footer') -%>

@@ -1,39 +1,26 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { mongoURI as mongodb } from './keys.js';
+import mongodb from './keys.js';
 import mongoose from 'mongoose';
+import Campground from './models/campground.js';
+import Comment from './models/comment.js';
+import seedDB from './seeds.js';
+
+// seedDB();
 
 const app = express();
 const port = 5000;
-
 mongoose
   .connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to DB!'))
   .catch((error) => console.error(error.message));
 
-const campgroundSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String,
-});
-
-const Campground = mongoose.model('Campground', campgroundSchema);
-
-// let campgrounds = [
-//   { name: 'Salmon Creek', image: 'images/pexels-snapwire-699558.jpg' },
-//   { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
-//   { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
-//   { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
-//   { name: 'Salmon Creek', image: 'public/images/pexels-snapwire-699558.jpg' },
-//   { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
-//   { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
-//   { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
-// ];
-
+// configure app
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
+// INDEX
 app.get('/', (req, res) => {
   res.render('landing');
 });
@@ -68,12 +55,15 @@ app.get('/campgrounds/new', (req, res) => {
   res.render('new');
 });
 
+// SHOW
 app.get('/campgrounds/:id', (req, res) => {
-  Campground.findById(req.params.id, (err, campground) => {
-    if (err) return console.error(err);
+  Campground.findById(req.params.id)
+    .populate('comments')
+    .exec((err, campground) => {
+      if (err) return console.error(err);
 
-    res.render('show', { campground: campground });
-  });
+      res.render('show', { campground: campground });
+    });
 });
 app.listen(port, () => {
   console.log('Sever is live!');
