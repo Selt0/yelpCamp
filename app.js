@@ -14,6 +14,7 @@ mongoose
 const campgroundSchema = new mongoose.Schema({
   name: String,
   image: String,
+  description: String,
 });
 
 const Campground = mongoose.model('Campground', campgroundSchema);
@@ -23,7 +24,7 @@ const Campground = mongoose.model('Campground', campgroundSchema);
 //   { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
 //   { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
 //   { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
-//   { name: 'Salmon Creek', image: 'images/pexels-snapwire-699558.jpg' },
+//   { name: 'Salmon Creek', image: 'public/images/pexels-snapwire-699558.jpg' },
 //   { name: 'Granite Hill', image: 'images/pexels-xue-guangjian-1687845.jpg' },
 //   { name: 'Mountain Goat Rest', image: 'images/pexels-guduru-ajay-bhargav-939723.jpg' },
 //   { name: 'Itasca', image: 'images/pexels-mac-destroir-2662816.jpg' },
@@ -42,7 +43,7 @@ app.get('/campgrounds', (req, res) => {
   Campground.find({}, (err, campgrounds) => {
     if (err) return console.error(err);
 
-    res.render('campgrounds', { campgrounds: campgrounds });
+    res.render('index', { campgrounds: campgrounds });
   });
 });
 
@@ -51,20 +52,29 @@ app.post('/campgrounds', (req, res) => {
   let newCampground = {
     name: req.body.name,
     image: req.body.image,
+    description: req.body.description,
   };
+
   // add to campgrounds db
   Campground.create(newCampground, (err, campground) => {
     err ? console.error(err) : console.log(`${campground.name} saved to DB!`);
   });
 
   // redirect back to campground
-  res.redirect('campgrounds');
+  res.redirect('/campgrounds');
 });
 
 app.get('/campgrounds/new', (req, res) => {
-  res.render('newCamp.ejs');
+  res.render('new');
 });
 
+app.get('/campgrounds/:id', (req, res) => {
+  Campground.findById(req.params.id, (err, campground) => {
+    if (err) return console.error(err);
+
+    res.render('show', { campground: campground });
+  });
+});
 app.listen(port, () => {
   console.log('Sever is live!');
 });
