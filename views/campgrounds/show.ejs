@@ -1,18 +1,51 @@
 <%- include('../partials/header') -%>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <p class="lead">Yelp Camp</p>
+      <div class="list-group">
+        <li class="list-group-item active">Info 1</li>
+        <li class="list-group-item">Info 2</li>
+        <li class="list-group-item">Info 3</li>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card mb-3">
+        <img src="<%= campground.image %>" alt="" class="card-img-top" />
+        <div class="card-body">
+          <h4 class="card-title">
+            <a href="#"><%= campground.name %></a>
+            <p class="float-right">$9/night</p>
+          </h4>
+          <p><%= campground.description %></p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <a
+            class="btn btn-success float-right"
+            href="/campgrounds/<%= campground._id %>/comments/new"
+            >Leave a review</a
+          >
+        </div>
+        <div class="card-body bg-light">
+          <% for (const comment of campground.comments){ %>
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <span class="card-title text-muted"><%= comment.author %></span>
+              <span class="float-right">10 days ago</span>
+              <p class="card-text"><%= comment.text %></p>
+            </div>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h1></h1>
 
-<h1><%= campground.name %></h1>
-
-<img src="<%= campground.image %>" />
-
-<p><%= campground.description %></p>
-
-<p>
-  <a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new"
-    >Add new comment</a
-  >
-</p>
+<p></p>
 <a href="/campgrounds">Go back</a>
 
-<% for (const comment of campground.comments){ %>
-<p><strong><%= comment.author %></strong> - <%= comment.text %></p>
-<% } %> <%- include('../partials/footer') -%>
+<%- include('../partials/footer') -%>

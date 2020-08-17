@@ -17,7 +17,7 @@ const seeds = [
   },
   {
     name: 'Canyon Floor',
-    image: 'images/pexels-snapwire-699558.jpg',
+    image: '/images/pexels-snapwire-699558.jpg',
     description:
       "Just my luck, no ice. God help us, we're in the hands of engineers. So you two dig up, dig up dinosaurs? Yes, Yes, without the oops! I was part of something special. Must go faster. My dad once told me, laugh and the world laughs with you, Cry, and I'll give you something to cry about you little bastard!",
   },
