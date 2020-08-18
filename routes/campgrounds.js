@@ -1,7 +1,7 @@
 import express from 'express';
 import Campground from '../models/campground.js';
 import Comment from '../models/comment.js';
-import { isLoggedIn } from './index.js';
+import { isLoggedIn, checkCampgroundOwnership } from './index.js';
 const router = express.Router();
 
 // INDEX
@@ -46,7 +46,6 @@ router.get('/:id', (req, res) => {
 
 // EDIT
 router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
-  console.log(req.user._id);
   Campground.findById(req.params.id, (err, campground) => {
     res.render('campgrounds/edit', { campground: campground });
   });
@@ -72,22 +71,5 @@ router.delete('/:id', checkCampgroundOwnership, async (req, res) => {
     res.redirect('/campgrounds');
   }
 });
-
-function checkCampgroundOwnership(req, res, next) {
-  // check if user is logge din
-  if (req.isAuthenticated()) {
-    Campground.findById(req.params.id, (err, campground) => {
-      if (err) return res.redirect('/campgrounds');
-      // check if id matches logged in user
-      if (campground.author.id.equals(req.user._id)) {
-        next();
-      } else {
-        res.redirect('back');
-      }
-    });
-  } else {
-    res.redirect('back');
-  }
-}
 
 export default router;

@@ -1,5 +1,5 @@
 import express from 'express';
-import { isLoggedIn } from './index.js';
+import { isLoggedIn, checkCommentOwnership } from './index.js';
 import Campground from '../models/campground.js';
 import Comment from '../models/comment.js';
 const router = express.Router({ mergeParams: true });
@@ -28,6 +28,29 @@ router.post('/', isLoggedIn, (req, res) => {
       campground.save();
       res.redirect(`/campgrounds/${campground._id}`);
     });
+  });
+});
+
+// EDIT
+router.get('/:comment_id/edit', checkCommentOwnership, (req, res) => {
+  Comment.findById(req.params.comment_id, (err, comment) => {
+    if (err) return res.redirect('back');
+    res.render('comments/edit', { campground_id: req.params.id, comment: comment });
+  });
+});
+
+// UPDATE
+router.put('/:comment_id', checkCommentOwnership, (req, res) => {
+  Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err) => {
+    if (err) return res.redirect('back');
+    res.redirect(`/campgrounds/${req.params.id}`);
+  });
+});
+
+// DESTROY
+router.delete('/:comment_id', checkCommentOwnership, (req, res) => {
+  Comment.findByIdAndRemove(req.params.comment_id, req.body.comment, (err) => {
+    res.redirect('back');
   });
 });
 
