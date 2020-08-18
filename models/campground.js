@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Comment from './comment.js';
 
 const campgroundSchema = new mongoose.Schema({
   name: String,
@@ -17,6 +18,14 @@ const campgroundSchema = new mongoose.Schema({
       ref: 'Comment',
     },
   ],
+});
+
+campgroundSchema.pre('remove', async function () {
+  await Comment.remove({
+    id: {
+      $in: this.comments,
+    },
+  });
 });
 
 export default mongoose.model('Campground', campgroundSchema);
