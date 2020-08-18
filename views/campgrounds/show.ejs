@@ -18,6 +18,7 @@
             <p class="float-right">$9/night</p>
           </h4>
           <p><%= campground.description %></p>
+          <p><em>Submitted by: <%= campground.author.username %></em></p>
         </div>
       </div>
       <div class="card">
@@ -32,7 +33,7 @@
           <% for (const comment of campground.comments){ %>
           <div class="row">
             <div class="col-md-12 mb-3">
-              <span class="card-title text-muted"><%= comment.author %></span>
+              <span class="card-title text-muted"><%= comment.author.username %></span>
               <span class="float-right">10 days ago</span>
               <p class="card-text"><%= comment.text %></p>
             </div>
