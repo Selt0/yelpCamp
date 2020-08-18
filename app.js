@@ -6,6 +6,7 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import User from './models/user.js';
 import expressSession from 'express-session';
+import methodOverride from 'method-override';
 
 // routes
 import campgroundRoutes from './routes/campgrounds.js';
@@ -13,8 +14,7 @@ import commentRoutes from './routes/comments.js';
 import indexRoutes from './routes/index.js';
 
 // import seedDB from './seeds.js';
-// reset database
-// seedDB();
+// seedDB(); // reset database
 
 const app = express();
 const port = 5000;
@@ -27,10 +27,7 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
-app.use(function (req, res, next) {
-  res.locals.currentUser = req.user;
-  next();
-});
+app.use(methodOverride('_method'));
 
 // configure passport
 app.use(
@@ -45,6 +42,11 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(function (req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
 
 // routes
 app.use(indexRoutes);
