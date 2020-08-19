@@ -19,11 +19,12 @@ router.post('/register', (req, res) => {
   const newUser = new User({ username: req.body.username });
   User.register(newUser, req.body.password, (err, user) => {
     if (err) {
-      console.error(err);
-      return res.render('register');
+      req.flash('error', err.message);
+      return res.redirect('register');
     }
 
     passport.authenticate('local')(req, res, () => {
+      req.flash('success', `Welcome to yelpCamp, ${user.username}!`);
       res.redirect('/campgrounds');
     });
   });
@@ -45,13 +46,14 @@ router.post(
 // logout
 router.get('/logout', (req, res) => {
   req.logout();
+  req.flash('success', 'Logged out!');
   res.redirect('/campgrounds');
 });
 
 // check if user is loggined in
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
-
+  req.flash('error', 'You must be logged in!');
   res.redirect('/login');
 }
 
@@ -60,15 +62,19 @@ function checkCampgroundOwnership(req, res, next) {
   // check if user is logged in
   if (req.isAuthenticated()) {
     Campground.findById(req.params.id, (err, campground) => {
-      if (err) return res.redirect('/campgrounds');
-      // check if id matches logged in user
-      if (campground.author.id.equals(req.user._id)) {
+      if (err || !campground) {
+        req.flash('error', 'Campground not found!');
+        res.redirect('/campgrounds');
+        // check if logged in user matched campground owner
+      } else if (campground.author.id.equals(req.user._id)) {
         next();
       } else {
+        req.flash('error', "You don't have permission to do that.");
         res.redirect('back');
       }
     });
   } else {
+    req.flash('error', 'You must be logged in!');
     res.redirect('back');
   }
 }
@@ -79,15 +85,20 @@ function checkCommentOwnership(req, res, next) {
   // check if user is logged in
   if (req.isAuthenticated()) {
     Comment.findById(req.params.comment_id, (err, comment) => {
-      if (err) return res.redirect('/campgrounds');
+      if (err || !comment) {
+        req.flash('error', 'Comment not found!');
+        return res.redirect('/campgrounds');
+      }
       // check if id matches logged in user
       if (comment.author.id.equals(req.user._id)) {
         next();
       } else {
+        req.flash('error', "You don't have permission to do that");
         res.redirect('back');
       }
     });
   } else {
+    req.flash('error', 'You must be logged in!');
     res.redirect('back');
   }
 }

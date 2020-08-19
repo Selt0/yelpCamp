@@ -38,7 +38,10 @@ router.get('/:id', (req, res) => {
   Campground.findById(req.params.id)
     .populate('comments')
     .exec((err, campground) => {
-      if (err) return console.error(err);
+      if (err || !campground) {
+        req.flash('error', 'Campground not found!');
+        return res.redirect('back');
+      }
 
       res.render('campgrounds/show', { campground: campground });
     });
@@ -55,7 +58,7 @@ router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
 router.put('/:id', checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
     if (err) return res.redirect('/campgrounds');
-
+    res.flash('success', 'Campground updated!');
     res.redirect(`/campgrounds/${req.params.id}`);
   });
 });
@@ -65,6 +68,7 @@ router.delete('/:id', checkCampgroundOwnership, async (req, res) => {
   try {
     let foundCampground = await Campground.findById(req.params.id);
     await foundCampground.remove();
+    req.flash('success', 'Campground removed.');
     res.redirect('/campgrounds');
   } catch (error) {
     console.error(error.message);
