@@ -7,6 +7,7 @@ import LocalStrategy from 'passport-local';
 import User from './models/user.js';
 import expressSession from 'express-session';
 import methodOverride from 'method-override';
+import flash from 'connect-flash';
 
 // routes
 import campgroundRoutes from './routes/campgrounds.js';
@@ -28,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
+app.use(flash());
 
 // configure passport
 app.use(
@@ -45,6 +47,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function (req, res, next) {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
   next();
 });
 
