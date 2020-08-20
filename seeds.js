@@ -47,6 +47,30 @@ const seeds = [
       username: 'Potato-Head',
     },
   },
+  {
+    name: 'Foggy Bottom',
+    image:
+      'https://images.unsplash.com/photo-1506535995048-638aa1b62b77?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60',
+    price: 10.5,
+    description:
+      " Yes, Yes, without the oops! Just my luck, no ice. We gotta burn the rain forest, dump toxic waste, pollute the air, and rip up the OZONE! 'Cause maybe if we screw up this planet enough, they won't want it anymore! Must go faster. God help us, we're in the hands of engineers.Life finds a way. Must go faster... go, go, go, go, go! Hey, take a look at the earthlings. Goodbye! Just my luck, no ice. You really think you can fly that thing? My dad once told me, laugh and the world laughs with you, Cry, and I'll give you something to cry about you little bastard!",
+    author: {
+      id: '5f3b23712219dd412952aa4e',
+      username: 'Potato-Head',
+    },
+  },
+  {
+    name: "Heaven's Door",
+    image:
+      'https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60',
+    price: 10,
+    description:
+      "Forget the fat lady! You're obsessed with the fat lady! Drive us out of here! You know what? It is beets. I've crashed into a beet truck. Just my luck, no ice. Checkmate... Do you have any idea how long it takes those cups to decompose. Just my luck, no ice.God creates dinosaurs. God destroys dinosaurs. God creates Man. Man destroys God. Man creates Dinosaurs. Must go faster... go, go, go, go, go! Just my luck, no ice. Yeah, but John, if The Pirates of the Caribbean breaks down, the pirates don’t eat the tourists.",
+    author: {
+      id: '5f3b23712219dd412952aa4e',
+      username: 'Potato-Head',
+    },
+  },
 ];
 
 async function seedDB() {

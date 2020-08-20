@@ -8,6 +8,7 @@ import User from './models/user.js';
 import expressSession from 'express-session';
 import methodOverride from 'method-override';
 import flash from 'connect-flash';
+import moment from 'moment';
 
 // routes
 import campgroundRoutes from './routes/campgrounds.js';
@@ -30,6 +31,7 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
 app.use(flash());
+app.locals.moment = moment;
 
 // configure passport
 app.use(

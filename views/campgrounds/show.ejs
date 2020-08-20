@@ -23,7 +23,12 @@
           </h4>
           <p><%= campground.description %></p>
           <% if (campground.author.username) { %>
-          <p><em>Submitted by: <%= campground.author.username %></em></p>
+          <p>
+            <em
+              >Submitted by: <%= campground.author.username %>, <%=
+              moment(campground.createdAt).fromNow() %></em
+            >
+          </p>
           <% } %> <% if (currentUser && campground.author.id.equals(currentUser._id)) { %>
           <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit</a>
           <form
@@ -49,7 +54,7 @@
           <div class="row">
             <div class="col-md-12 mb-3">
               <span class="card-title text-muted"><%= comment.author.username %></span>
-              <span class="float-right">10 days ago</span>
+              <span class="float-right"><%= moment(comment.createdAt).fromNow() %></span>
               <p class="card-text"><%= comment.text %></p>
               <% if (currentUser && comment.author.id.equals(currentUser._id)) { %>
               <a

@@ -22,6 +22,7 @@ router.post('/', isLoggedIn, (req, res) => {
     campground.author.id = req.user._id;
     campground.author.username = req.user.username;
     campground.save();
+    console.log(campground);
   });
 
   // redirect back to campground
