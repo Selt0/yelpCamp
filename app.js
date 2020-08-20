@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongodb from './keys.js';
+import mongodb from '/config/keys.js';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
