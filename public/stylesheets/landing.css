@@ -50,7 +50,7 @@ body {
   animation-delay: 10s;
 }
 .slideshow li:nth-child(3) {
-  background-image: url(../images/pexels-snapwire-699558.jpg);
+  background-image: url(https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60);
   animation-delay: 20s;
 }
 .slideshow li:nth-child(4) {
@@ -58,7 +58,7 @@ body {
   animation-delay: 30s;
 }
 .slideshow li:nth-child(5) {
-  background-image: url(https://images.unsplash.com/photo-1537565266759-34bbc16be345?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60);
+  background-image: url(https://images.unsplash.com/photo-1506535995048-638aa1b62b77?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=900&q=60);
   animation-delay: 40s;
 }
 

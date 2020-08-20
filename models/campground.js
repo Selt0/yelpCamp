@@ -3,6 +3,7 @@ import Comment from './comment.js';
 
 const campgroundSchema = new mongoose.Schema({
   name: String,
+  price: String,
   image: String,
   description: String,
   author: {

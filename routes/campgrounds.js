@@ -58,7 +58,7 @@ router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
 router.put('/:id', checkCampgroundOwnership, (req, res) => {
   Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, campground) => {
     if (err) return res.redirect('/campgrounds');
-    res.flash('success', 'Campground updated!');
+    req.flash('success', 'Campground updated!');
     res.redirect(`/campgrounds/${req.params.id}`);
   });
 });

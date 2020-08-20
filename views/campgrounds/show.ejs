@@ -15,7 +15,11 @@
         <div class="card-body">
           <h4 class="card-title">
             <a href="#"><%= campground.name %></a>
-            <p class="float-right">$9/night</p>
+            <% if (campground.price == 0) { %>
+            <p class="float-right">FREE</p>
+            <% } else { %>
+            <p class="float-right">$<%= campground.price %>/night</p>
+            <% } %>
           </h4>
           <p><%= campground.description %></p>
           <% if (campground.author.username) { %>
