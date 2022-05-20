@@ -1,7 +1,5 @@
 # yelpCamp
 
-> A Node.js web application project from the Udemy course - [The Web Developer Bootcamp by Colt Steele](https://www.udemy.com/the-web-developer-bootcamp/)
-
 Link to [yelpCamp](https://mysterious-savannah-78294.herokuapp.com/)
 
 ## Features
